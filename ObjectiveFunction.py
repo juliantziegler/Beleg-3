@@ -2,6 +2,7 @@ from Floorball_Model import ModelFloorball
 from scipy.optimize import minimize
 import numpy as np
 import matplotlib.pyplot as plt
+from statistics import median
 
 
 def floorball_objective(theta, v0):
@@ -35,7 +36,12 @@ def get_angle_for_velocities(start_vel: int, end_vel: int):
     initial_vels = np.arange(start_vel, end_vel, 1)
     best_angles = []
     for v0 in initial_vels:
-        best_angles.append(optimize_angle(v0))
+        i = 0
+        volatile_list = []
+        for i in range(10):
+            volatile_list.append(optimize_angle(v0))
+            i += 1
+        best_angles.append(median(volatile_list))
         print('Got result for v0={}'.format(v0))
 
     plt.plot(initial_vels, best_angles)
@@ -43,7 +49,8 @@ def get_angle_for_velocities(start_vel: int, end_vel: int):
     plt.ylabel('Optimum angle')
     plt.show()
 
+
 if __name__ == '__main__':
     #get_angle_results(30)
-    #get_best_angle(30)
-    get_angle_for_velocities(1, 100)
+    print(optimize_angle(60))
+    #get_angle_for_velocities(1, 100)
